@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import {
   DEFAULT_PROFILE,
   DEFAULT_PROJECTS
@@ -13,13 +13,34 @@ import { FloatingSocials } from './components/FloatingSocials'
 import './index.css'
 
 export function App() {
-  // Datos gestionados directamente desde el código fuente
   const profile = DEFAULT_PROFILE
   const projects = DEFAULT_PROJECTS
 
   const [activeSection, setActiveSection] = useState<string>('home')
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+  const [cachedProjects, setCachedProjects] = useState<Project[]>([])
   const isNavigatingRef = useRef<boolean>(false)
+
+  // Precalentamiento especulativo de proyectos (DNS + Prefetch + Iframe Pool al pasar mouse o touch)
+  const handlePreloadProject = useCallback((proj: Project) => {
+    if (!proj?.appUrl) return
+
+    setCachedProjects((prev) => {
+      if (prev.some((p) => p.id === proj.id)) return prev
+      return [...prev, proj]
+    })
+
+    // Inyectar enlace de prefetch en el head si no existe
+    const linkId = `prefetch-${proj.id}`
+    if (!document.getElementById(linkId)) {
+      const link = document.createElement('link')
+      link.id = linkId
+      link.rel = 'prefetch'
+      link.href = proj.appUrl
+      link.as = 'document'
+      document.head.appendChild(link)
+    }
+  }, [])
 
   // Navegación suave a la sección
   const handleNavigate = (sectionId: string) => {
@@ -30,7 +51,7 @@ export function App() {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' })
       setTimeout(() => {
         isNavigatingRef.current = false
-      }, 700)
+      }, 750)
     }
   }
 
@@ -51,7 +72,10 @@ export function App() {
             }
           })
         },
-        { threshold: 0.5 }
+        {
+          rootMargin: '-20% 0px -40% 0px',
+          threshold: [0.1, 0.4]
+        }
       )
 
       observer.observe(element)
@@ -63,7 +87,7 @@ export function App() {
     }
   }, [])
 
-  // Navegación por teclado (Flecha Arriba / Abajo)
+  // Navegación por teclado (Flechas Arriba / Abajo)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (selectedProject) return
@@ -90,7 +114,7 @@ export function App() {
 
   return (
     <div className="portfolio-app-root">
-      {/* Header fijo superior */}
+      {/* Header fijo superior con soporte móvil responsivo */}
       <Navbar
         activeSection={activeSection}
         onSelectSection={handleNavigate}
@@ -110,17 +134,25 @@ export function App() {
 
         <PortfolioSection
           projects={projects}
-          onSelectProject={(proj) => setSelectedProject(proj)}
+          onSelectProject={(proj) => {
+            handlePreloadProject(proj)
+            setSelectedProject(proj)
+          }}
+          onPreloadProject={handlePreloadProject}
         />
       </main>
 
       {/* Botones flotantes redondos de redes sociales a la derecha */}
-      <FloatingSocials socialLinks={profile.socialLinks} />
+      <FloatingSocials
+        socialLinks={profile.socialLinks}
+        hidden={Boolean(selectedProject)}
+      />
 
-      {/* Modal para visualizar proyectos en vivo */}
+      {/* Modal para visualizar proyectos en vivo ultrarrápido */}
       <ProjectModal
         project={selectedProject}
         onClose={() => setSelectedProject(null)}
+        cachedProjects={cachedProjects}
       />
     </div>
   )

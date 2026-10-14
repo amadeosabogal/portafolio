@@ -14,6 +14,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ profile }) => {
           src="/pexels-ruining-song-3594016-29422663.jpg"
           alt="Oficina y Espacio WODITEK"
           className="about-portrait-image"
+          loading="lazy"
         />
         <div className="about-portrait-gradient" />
       </div>
@@ -25,13 +26,15 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ profile }) => {
             <div className="title-underline" />
           </div>
 
-          <a href={`mailto:${profile.email}`} className="about-email">
+          <a
+            href={`mailto:${profile.email}`}
+            className="about-email"
+            title={`Enviar correo a ${profile.email}`}
+          >
             {profile.email}
           </a>
 
-          <p className="about-bio">
-            {profile.aboutBio}
-          </p>
+          <p className="about-bio">{profile.aboutBio}</p>
 
           <div className="about-location-box">
             <div className="location-line-decor left" />

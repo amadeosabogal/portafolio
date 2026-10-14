@@ -18,34 +18,41 @@ export const HomeSection: React.FC<HomeSectionProps> = ({
           src="/hero-bg.jpg"
           alt="WODITEK Workstation"
           className="home-bg-image"
+          loading="eager"
         />
         <div className="home-bg-overlay" />
       </div>
 
       <div className="home-content">
         <div className="home-hero-text">
+          <div className="hero-badge-pill">
+            <span className="hero-badge-dot" />
+            <span>Soluciones Digitales &amp; Software</span>
+          </div>
+
           <h1 className="hero-brand-title">
             {profile.brandName || 'WODITEK'}
           </h1>
 
           <p className="hero-tagline">
-            {profile.tagline || 'Desarrollo de software a medida, aplicaciones web escalables y soluciones digitales de alto impacto para potenciar tu negocio.'}
+            {profile.tagline ||
+              'Desarrollo de software a medida, aplicaciones web escalables y soluciones digitales de alto impacto para potenciar tu negocio.'}
           </p>
 
           <div className="hero-cta-buttons">
             <button
               type="button"
-              className="action-btn-sharp"
-              onClick={() => onNavigate('about')}
+              className="action-btn-sharp primary"
+              onClick={() => onNavigate('portfolio')}
             >
-              Nosotros
+              Explorar Portafolio
             </button>
             <button
               type="button"
               className="action-btn-sharp outline"
-              onClick={() => onNavigate('portfolio')}
+              onClick={() => onNavigate('about')}
             >
-              Portafolio
+              Sobre Nosotros
             </button>
           </div>
         </div>
