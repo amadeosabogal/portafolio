@@ -1,23 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import {
-  MenuIcon,
-  CloseIcon,
   HomeIcon,
   UsersIcon,
-  BriefcaseIcon,
-  WhatsAppIcon
+  BriefcaseIcon
 } from './Icons'
 
 interface NavbarProps {
   activeSection: string
   onSelectSection: (section: string) => void
-  phone: string
+  phone?: string
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   activeSection,
-  onSelectSection,
-  phone
+  onSelectSection
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false)
 
@@ -88,43 +84,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             )
           })}
         </ul>
-
-        {/* Acciones del lado derecho (Teléfono escritorio + Botón móvil) */}
-        <div className="nav-right">
-          <a
-            href="https://wa.me/51953095173"
-            target="_blank"
-            rel="noreferrer"
-            className="nav-phone desktop-only"
-            title={`Contactar al WhatsApp: ${phone}`}
-          >
-            <WhatsAppIcon size={16} className="phone-icon" />
-            <span>{phone}</span>
-          </a>
-
-          {/* Botón rápido de WhatsApp para móviles */}
-          <a
-            href="https://wa.me/51953095173"
-            target="_blank"
-            rel="noreferrer"
-            className="mobile-quick-wa mobile-only"
-            title="Escribir por WhatsApp"
-            aria-label="Escribir por WhatsApp"
-          >
-            <WhatsAppIcon size={18} />
-          </a>
-
-          {/* Botón Hamburguesa para móviles */}
-          <button
-            type="button"
-            className="mobile-menu-toggle mobile-only"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-expanded={mobileMenuOpen}
-            aria-label={mobileMenuOpen ? 'Cerrar menú' : 'Abrir menú de navegación'}
-          >
-            {mobileMenuOpen ? <CloseIcon size={22} /> : <MenuIcon size={22} />}
-          </button>
-        </div>
       </nav>
 
       {/* Menú desplegable para dispositivos móviles */}
@@ -134,11 +93,6 @@ export const Navbar: React.FC<NavbarProps> = ({
       >
         <div className="mobile-nav-backdrop" onClick={() => setMobileMenuOpen(false)} />
         <div className="mobile-nav-panel">
-          <div className="mobile-nav-header">
-            <span className="mobile-menu-title">Navegación</span>
-            <span className="mobile-brand-badge">WODITEK</span>
-          </div>
-
           <ul className="mobile-nav-links">
             {navItems.map((item) => {
               const isActive = activeSection === item.id
@@ -160,23 +114,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               )
             })}
           </ul>
-
-          <div className="mobile-nav-footer">
-            <a
-              href="https://wa.me/51953095173"
-              target="_blank"
-              rel="noreferrer"
-              className="mobile-wa-banner-btn"
-            >
-              <WhatsAppIcon size={20} />
-              <div className="mobile-wa-info">
-                <span className="wa-title">Contactar por WhatsApp</span>
-                <span className="wa-number">{phone}</span>
-              </div>
-            </a>
-          </div>
         </div>
       </div>
-    </header>
+    </header >
   )
 }

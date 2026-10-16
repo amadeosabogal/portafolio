@@ -25,11 +25,6 @@ export const HomeSection: React.FC<HomeSectionProps> = ({
 
       <div className="home-content">
         <div className="home-hero-text">
-          <div className="hero-badge-pill">
-            <span className="hero-badge-dot" />
-            <span>Soluciones Digitales &amp; Software</span>
-          </div>
-
           <h1 className="hero-brand-title">
             {profile.brandName || 'WODITEK'}
           </h1>

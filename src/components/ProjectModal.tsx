@@ -104,14 +104,6 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                   <span className="project-modal-tag">
                     {project.category || 'Proyecto'}
                   </span>
-                  <span
-                    className={`preview-status-pill ${
-                      isCurrentLoaded ? 'online' : 'loading'
-                    }`}
-                  >
-                    <span className="status-dot" />
-                    {isCurrentLoaded ? 'En vivo' : 'Cargando vista interactiva...'}
-                  </span>
                 </div>
                 <h2 className="project-modal-title">{project.title}</h2>
               </div>
@@ -249,9 +241,8 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                     <iframe
                       key={`${p.id}-${refreshKey}`}
                       src={p.appUrl}
-                      className={`project-live-frame ${isCurrent ? 'active' : 'hidden'} ${
-                        isLoaded ? 'loaded' : 'loading'
-                      }`}
+                      className={`project-live-frame ${isCurrent ? 'active' : 'hidden'} ${isLoaded ? 'loaded' : 'loading'
+                        }`}
                       title={`Vista previa en vivo de ${p.title}`}
                       sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-downloads"
                       loading="eager"

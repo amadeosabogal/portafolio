@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react'
 import type { Project } from '../types'
-import { ExternalLinkIcon, SparklesIcon } from './Icons'
+import { ExternalLinkIcon } from './Icons'
 
 interface PortfolioSectionProps {
   projects: Project[]
@@ -36,10 +36,6 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({
         {/* Cabecera y filtros */}
         <div className="portfolio-header-row">
           <div className="section-title-wrap">
-            <div className="portfolio-badge">
-              <SparklesIcon size={14} />
-              <span>Proyectos Interactivos</span>
-            </div>
             <h2 className="section-title">Portafolio</h2>
             <div className="title-underline" />
           </div>
