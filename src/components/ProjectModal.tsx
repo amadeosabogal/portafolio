@@ -78,7 +78,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
 
   const handleRefresh = (id: string) => {
     setLoadedFrames((prev) => ({ ...prev, [id]: false }))
-    setRefreshCounters((prev) => ({ ...prev, [id]: (prev[id] || 0) + 1 }))
+    setRefreshCounters((prev) => ({ ...prev, [id]: Date.now() }))
   }
 
   const isCurrentLoaded = project ? Boolean(loadedFrames[project.id]) : false
@@ -145,7 +145,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                   type="button"
                   className="modal-icon-btn refresh-btn"
                   onClick={() => handleRefresh(project.id)}
-                  title="Recargar vista previa"
+                  title="Recargar vista previa (forzar última versión sin caché)"
                 >
                   <RefreshCwIcon size={15} />
                   <span className="btn-label-desktop">Recargar</span>
@@ -236,11 +236,14 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                   const isCurrent = project.id === p.id
                   const refreshKey = refreshCounters[p.id] || 0
                   const isLoaded = loadedFrames[p.id]
+                  const iframeSrc = refreshKey > 0
+                    ? `${p.appUrl}${p.appUrl.includes('?') ? '&' : '?'}_t=${refreshKey}`
+                    : p.appUrl
 
                   return (
                     <iframe
                       key={`${p.id}-${refreshKey}`}
-                      src={p.appUrl}
+                      src={iframeSrc}
                       className={`project-live-frame ${isCurrent ? 'active' : 'hidden'} ${isLoaded ? 'loaded' : 'loading'
                         }`}
                       title={`Vista previa en vivo de ${p.title}`}
